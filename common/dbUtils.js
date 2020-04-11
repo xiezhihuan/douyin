@@ -10,9 +10,8 @@ const dbName = 'douyin';
 module.exports.collectionName = {
     crude_hot_word: 'crude_hot_words',
     crude_hot_word_haveId:'crude_hot_words_haveId',
-    crude_hot_video:"crude_hot_videos",
-    hot_words_haveId:'hot_words_haveId',
-    hot_words:'hot_words_haveId',
+    crude_hot_video:'crude_hot_videos',
+    hot_words:'hot_words',
     hot_videos:'hot_videos'
 };
 
@@ -33,7 +32,7 @@ function _connect(){
 module.exports.insertOne = async (collName,insertObj)=>{
     const db = await _connect();
     return new Promise((resolve,reject)=>{
-        db.collection(collName).insertOne(insertObj,(err,results)=>{
+        db.collection(collName).insertOne({...insertObj,delete:0},(err,results)=>{
             if(err) reject(err);
             else resolve(results);
         });
@@ -64,7 +63,18 @@ module.exports.find = async (collName,whereObj={},limit=0,skip=0,sortObj={})=>{
 module.exports.updateOneById = async (collName,id,updateObj)=>{
     const db = await _connect();
     return new Promise((resolve,reject)=>{
-        db.collection(collName).updateOne({_id:mongodb.Objectid(id)},updateObj,(resolve,reject)=>{
+        db.collection(collName).updateOne({_id:mongodb.Objectid(id)},updateObj,(err,results)=>{
+            if(err) reject(err);
+            else resolve(results);
+        });
+    });
+};
+
+// 根据某字段查找到该数据,如果该数据存在，则更新;不存在，则创建
+module.exports.updateOneByField = async (collName,fieldObj,updateObj)=>{
+    const db = await _connect();
+    return new Promise((resolve,reject)=>{
+        db.collection(collName).updateOne(fieldObj,{$set:{...updateObj,delete: 0}},{upsert:true},(err,results)=>{
             if(err) reject(err);
             else resolve(results);
         });
