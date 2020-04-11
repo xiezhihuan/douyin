@@ -12,7 +12,8 @@ module.exports.collectionName = {
     crude_hot_word_haveId:'crude_hot_words_haveId',
     crude_hot_video:'crude_hot_videos',
     hot_words:'hot_words',
-    hot_videos:'hot_videos'
+    hot_videos:'hot_videos',
+    users:'users',
 };
 
 

@@ -3,6 +3,7 @@ const douyin = require('./work/douyin');
 async function run() {
    updateHotwords();
    douyin.getHotVideos();
+   douyin.getUsers();
 }
 
 function updateHotwords() {

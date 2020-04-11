@@ -55,12 +55,17 @@ const douyin = {
             dbUtils.updateOneByField(dbUtils.collectionName.hot_videos,{vid},{vid,desc,hot_value,
                 video,cover,create_time,duration,share_url,group_id,aweme_id})
         })
-    }
+    },
 
-
-
-
-
+   async getUsers(){
+        const crudeVideosObj = await _getHotSearch(Url.hot_video_list,dbUtils.collectionName.crude_hot_video);
+       const aweme_list = crudeVideosObj.data.aweme_list;
+       aweme_list.forEach(item =>{
+           const {uid,nickname,signature} = item.aweme_info.author;
+           const avatar = item.aweme_info.author.avatar_larger.url_list[0];
+           dbUtils.updateOneByField(dbUtils.collectionName.users,{uid},{uid,nickname,signature,avatar})
+       })
+   }
 };
 
 module.exports = douyin;
