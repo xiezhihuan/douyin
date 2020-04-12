@@ -2,7 +2,7 @@ var Utils = require('../common/utils');
 var dbUtils = require('../common/dbUtils');
 var Url = require('../common/url');
 const agent = require('../common/http/agent');
-
+const API = require('../common/http/douyin');
 
 async function _getHotSearch(url,collection) {
    const resp = await agent.get(url);
@@ -38,7 +38,7 @@ const douyin = {
         const wordList = crudeHotWord.data.word_list;
         wordList.forEach(item =>{
             const {hot_value,word} = item;
-            dbUtils.updateOneByField(dbUtils.collectionName.hot_words,{word},{hot_value,word})
+            dbUtils.updateOneByField(dbUtils.collectionName.hot_words,{word},{hot_value,word});
         });
     },
 
@@ -51,9 +51,10 @@ const douyin = {
             const {share_url,aweme_id,create_time,desc,hot_value,group_id,duration,} = item.aweme_info;
             const {vid} = item.aweme_info.video;
             const cover = item.aweme_info.video.cover.url_list[0];
-            const video = item.aweme_info.video.play_addr.url_list[0];
+            const play_addr = API.video.play+vid;
+            const playwm_addr = API.video.playwm+vid;
             dbUtils.updateOneByField(dbUtils.collectionName.hot_videos,{vid},{vid,desc,hot_value,
-                video,cover,create_time,duration,share_url,group_id,aweme_id})
+                play_addr,playwm_addr,cover,create_time,duration,share_url,group_id,aweme_id})
         })
     },
 
