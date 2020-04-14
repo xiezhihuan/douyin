@@ -43,7 +43,7 @@ class DbUtils {
                     ...updateObj,
                     delete: 0
                 }
-            },  (err, results) => {
+            },{upsert:true},  (err, results) => {
                 if (err) reject(err);
                 else resolve(results);
             });
