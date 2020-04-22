@@ -1,4 +1,5 @@
 const douyin = require('./work/douyin');
+const schedule = require('node-schedule');
 
 async function run() {
    updateHotwords();
@@ -14,5 +15,6 @@ function updateHotwords() {
         console.log('完成热搜词精确库更新（无id的）');
     });
 }
-
-run();
+var j = schedule.scheduleJob('2 0 * * *', function(){
+  run();
+});
